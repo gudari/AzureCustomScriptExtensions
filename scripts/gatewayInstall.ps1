@@ -19,11 +19,11 @@ function Now-Value()
 
 function Throw-Error([string] $msg)
 {
-	try 
+	try
 	{
 		throw $msg
-	} 
-	catch 
+	}
+	catch
 	{
 		$stack = $_.ScriptStackTrace
 		Trace-Log "DMDTTP is failed: $msg`nStack:`n$stack"
@@ -49,11 +49,11 @@ function Trace-Log([string] $msg)
 function Run-Process([string] $process, [string] $arguments)
 {
 	Write-Verbose "Run-Process: $process $arguments"
-	
+
 	$errorFile = "$env:tmp\tmp$pid.err"
 	$outFile = "$env:tmp\tmp$pid.out"
 	"" | Out-File $outFile
-	"" | Out-File $errorFile	
+	"" | Out-File $errorFile
 
 	$errVariable = ""
 
@@ -67,7 +67,7 @@ function Run-Process([string] $process, [string] $arguments)
 		$proc = Start-Process -FilePath $process -ArgumentList $arguments -Wait -Passthru -NoNewWindow `
 			-RedirectStandardError $errorFile -RedirectStandardOutput $outFile -ErrorVariable errVariable
 	}
-	
+
 	$errContent = [string] (Get-Content -Path $errorFile -Delimiter "!!!DoesNotExist!!!")
 	$outContent = [string] (Get-Content -Path $outFile -Delimiter "!!!DoesNotExist!!!")
 
@@ -75,7 +75,7 @@ function Run-Process([string] $process, [string] $arguments)
 	Remove-Item $outFile
 
 	if($proc.ExitCode -ne 0 -or $errVariable -ne "")
-	{		
+	{
 		Throw-Error "Failed to run process: exitCode=$($proc.ExitCode), errVariable=$errVariable, errContent=$errContent, outContent=$outContent."
 	}
 
@@ -117,13 +117,22 @@ function Install-Gateway([string] $gwPath)
 	{
 		Throw-Error "Invalid gateway path: $gwPath"
 	}
-	
-	Trace-Log "Start Gateway installation"
-	Run-Process "msiexec.exe" "/i gateway.msi INSTALLTYPE=AzureTemplate /quiet /norestart"		
-	
-	Start-Sleep -Seconds 30	
 
-	Trace-Log "Installation of gateway is successful"
+	$installPath = Get-InstalledFilePath
+	if ([string]::IsNullOrEmpty($installPath))
+	{
+
+		Trace-Log "Start Gateway installation"
+		Run-Process "msiexec.exe" "/i gateway.msi INSTALLTYPE=AzureTemplate /quiet /norestart"
+
+		Start-Sleep -Seconds 30
+
+		Trace-Log "Installation of gateway is successful"
+	}
+	else
+	{
+		Trace-Log "Installation of gateway is already installed"
+	}
 }
 
 function Get-RegistryProperty([string] $keyPath, [string] $property)
