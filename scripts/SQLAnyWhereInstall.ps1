@@ -262,6 +262,10 @@ Download-7zip $zipUri $zipPath
 Install-7zip $zipPath
 Install-SQLAnyWhere $anyPath
 
+
+Trace-Log "databaseList: $databaseList"
+Trace-Log "hostAddressList: $hostAddressList"
+Trace-Log "serverNameList: $serverNameList"
 $databaseArray    = $databaseList.Split(",")
 $hostAddressArray = $hostAddressList.Split(",")
 $serverNameArray  = $serverNameList.Split(",")
