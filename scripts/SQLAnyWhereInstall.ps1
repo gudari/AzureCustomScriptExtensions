@@ -1,4 +1,12 @@
-﻿# init log setting
+﻿param(
+ [string]
+ $databaseList,
+ [string]
+ $hostAddressList,
+ [string]
+ $serverNameList
+)
+# init log setting
 $logLoc = "$env:SystemDrive\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\"
 if (! (Test-Path($logLoc)))
 {
@@ -225,6 +233,16 @@ function Get-InstalledZipFilePath()
 	return $filePath
 }
 
+function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] $serverName)
+{
+	$driverName = "SQL AnyWhere 17"
+	$dsnType    = "System"
+	$platform   = "64-bit"
+
+	$properties = @("DatabaseName=$databaseName", "ServerName=$serverName", "Integrated=NO", "Host=$hostAddress")
+	Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue
+}
+
 
 Trace-Log "Log file: $logLoc"
 $anyUri = "https://d5d4ifzqzkhwt.cloudfront.net/sqla17client/SQLA17_Windows_Client.exe"
@@ -243,3 +261,11 @@ Download-SQLAnyWhere $anyUri $anyPath
 Download-7zip $zipUri $zipPath
 Install-7zip $zipPath
 Install-SQLAnyWhere $anyPath
+
+$databaseArray    = $databaseList.Split(",")
+$hostAddressArray = $hostAddressList.Split(",")
+$serverNameArray  = $serverNameList.Split(",")
+
+For ($i=0; $i -lt $databaseArray.Length; $i++) {
+	Create-ODBCDsn $databaseArray[$i] $hostAddressArray[$i] $serverNameArray[$i]
+}
