@@ -158,7 +158,7 @@ function Get-InstalledFilePath()
 	$filePath = Get-RegistryProperty "hklm:\Software\Microsoft\DataTransfer\DataManagementGateway\ConfigurationManager" "DiacmdPath"
 	if ([string]::IsNullOrEmpty($filePath))
 	{
-		Throw-Error "Get-InstalledFilePath: Cannot find installed File Path"
+		Trace-Log "Get-InstalledFilePath: Cannot find installed File Path"
 	}
     Trace-Log "Gateway installation file: $filePath"
 
