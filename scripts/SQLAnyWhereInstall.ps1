@@ -4,7 +4,9 @@
  [string]
  $hostAddressList,
  [string]
- $serverNameList
+ $serverNameList,
+ [System.Management.Automation.PSCredential]
+ $domainCredentials
 )
 # init log setting
 $logLoc = "$env:SystemDrive\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\"
@@ -236,7 +238,7 @@ function Get-InstalledZipFilePath()
 function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] $serverName)
 {
 	$driverName = "SQL Anywhere 17"
-	$dsnType    = "User"
+	$dsnType    = "System"
 	$platform   = "64-bit"
 	Trace-Log $databaseName
 	Trace-Log $hostAddress
@@ -246,7 +248,7 @@ function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] 
 	$credential = New-Object System.Management.Automation.PSCredential @(($adminUser), (ConvertTo-SecureString -String $adminPass -AsPlainText -Force))
 
 	$properties = @("DatabaseName=$databaseName", "ServerName=$serverName", "Integrated=NO", "Host=$hostAddress")
-	Invoke-Command -Credential $credential -ComputerName localhost -ScriptBlock { Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue }
+	Invoke-Command -Credential $domainCredentials -ComputerName localhost -ScriptBlock { Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue }
 	Start-Sleep -Seconds 5
 }
 
