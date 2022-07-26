@@ -235,7 +235,7 @@ function Get-InstalledZipFilePath()
 
 function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] $serverName)
 {
-	$driverName = "SQL AnyWhere 17"
+	$driverName = "SQL Anywhere 17"
 	$dsnType    = "System"
 	$platform   = "64-bit"
 	Trace-Log $databaseName
