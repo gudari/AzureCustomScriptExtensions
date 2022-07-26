@@ -243,7 +243,7 @@ function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] 
 	Trace-Log $serverName
 
 	$properties = @("DatabaseName=$databaseName", "ServerName=$serverName", "Integrated=NO", "Host=$hostAddress")
-	Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties
+	Run-Process Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties
 	Start-Sleep -Seconds 5
 }
 
