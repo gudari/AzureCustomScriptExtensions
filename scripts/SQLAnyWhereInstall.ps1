@@ -243,7 +243,8 @@ function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] 
 	Trace-Log $serverName
 
 	$properties = @("DatabaseName=$databaseName", "ServerName=$serverName", "Integrated=NO", "Host=$hostAddress")
-	Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue
+	Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties
+	Start-Sleep -Seconds 5
 }
 
 
@@ -266,15 +267,9 @@ Install-7zip $zipPath
 Install-SQLAnyWhere $anyPath
 
 
-Trace-Log "databaseList: $databaseList"
-Trace-Log "hostAddressList: $hostAddressList"
-Trace-Log "serverNameList: $serverNameList"
 $databaseArray    = $databaseList.Split(",")
 $hostAddressArray = $hostAddressList.Split(",")
 $serverNameArray  = $serverNameList.Split(",")
-Trace-Log $databaseArray.Length
-Trace-Log $hostAddressArray.Length
-Trace-Log $serverNameArray.Length
 
 For ($i=0; $i -lt $databaseArray.Length; $i++) {
 	Create-ODBCDsn $databaseArray[$i] $hostAddressArray[$i] $serverNameArray[$i]
