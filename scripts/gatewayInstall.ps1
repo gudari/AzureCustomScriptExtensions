@@ -187,4 +187,3 @@ Download-Gateway $uri $gwPath
 Install-Gateway $gwPath
 
 Register-Gateway $gatewayKey
-

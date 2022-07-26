@@ -269,7 +269,13 @@ Trace-Log "serverNameList: $serverNameList"
 $databaseArray    = $databaseList.Split(",")
 $hostAddressArray = $hostAddressList.Split(",")
 $serverNameArray  = $serverNameList.Split(",")
+Trace-Log $databaseArray.Length
+Trace-Log $hostAddressArray.Length
+Trace-Log $serverNameArray.Length
 
 For ($i=0; $i -lt $databaseArray.Length; $i++) {
+	Trace-Log $databaseArray[$i]
+	Trace-Log $hostAddressArray[$i]
+	Trace-Log $serverNameArray[$i]
 	Create-ODBCDsn $databaseArray[$i] $hostAddressArray[$i] $serverNameArray[$i]
 }
