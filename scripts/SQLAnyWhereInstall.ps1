@@ -238,6 +238,9 @@ function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] 
 	$driverName = "SQL AnyWhere 17"
 	$dsnType    = "System"
 	$platform   = "64-bit"
+	Trace-Log $databaseName
+	Trace-Log $hostAddress
+	Trace-Log $serverName
 
 	$properties = @("DatabaseName=$databaseName", "ServerName=$serverName", "Integrated=NO", "Host=$hostAddress")
 	Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue
@@ -274,8 +277,5 @@ Trace-Log $hostAddressArray.Length
 Trace-Log $serverNameArray.Length
 
 For ($i=0; $i -lt $databaseArray.Length; $i++) {
-	Trace-Log $databaseArray[$i]
-	Trace-Log $hostAddressArray[$i]
-	Trace-Log $serverNameArray[$i]
 	Create-ODBCDsn $databaseArray[$i] $hostAddressArray[$i] $serverNameArray[$i]
 }
