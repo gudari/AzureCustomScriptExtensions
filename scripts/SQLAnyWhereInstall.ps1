@@ -243,7 +243,6 @@ function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] 
 	Trace-Log $serverName
 
 	Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue
-	Start-Sleep -Seconds 5
 }
 
 Trace-Log "Log file: $logLoc"
