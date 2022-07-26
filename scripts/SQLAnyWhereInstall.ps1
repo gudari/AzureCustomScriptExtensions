@@ -245,8 +245,6 @@ function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] 
 	Trace-Log $serverName
 
 	Enable-PSRemoting -Force
-	$credential = New-Object System.Management.Automation.PSCredential @(($adminUser), (ConvertTo-SecureString -String $adminPass -AsPlainText -Force))
-
 	$properties = @("DatabaseName=$databaseName", "ServerName=$serverName", "Integrated=NO", "Host=$hostAddress")
 	Invoke-Command -Credential $domainCredentials -ComputerName localhost -ScriptBlock { Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue }
 	Start-Sleep -Seconds 5
