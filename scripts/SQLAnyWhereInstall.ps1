@@ -4,9 +4,7 @@
  [string]
  $hostAddressList,
  [string]
- $serverNameList,
- [System.Management.Automation.PSCredential]
- $domainCredentials
+ $serverNameList
 )
 # init log setting
 $logLoc = "$env:SystemDrive\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\"
@@ -244,12 +242,9 @@ function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] 
 	Trace-Log $hostAddress
 	Trace-Log $serverName
 
-	Enable-PSRemoting -Force
-	$properties = @("DatabaseName=$databaseName", "ServerName=$serverName", "Integrated=NO", "Host=$hostAddress")
-	Invoke-Command -Credential $domainCredentials -ComputerName localhost -ScriptBlock { Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue }
+	Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue
 	Start-Sleep -Seconds 5
 }
-
 
 Trace-Log "Log file: $logLoc"
 $anyUri = "https://d5d4ifzqzkhwt.cloudfront.net/sqla17client/SQLA17_Windows_Client.exe"
