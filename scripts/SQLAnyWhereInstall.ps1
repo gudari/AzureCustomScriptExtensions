@@ -233,17 +233,18 @@ function Get-InstalledZipFilePath()
 	return $filePath
 }
 
-function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] $serverName)
-{
-	$driverName = "SQL Anywhere 17"
-	$dsnType    = "System"
-	$platform   = "64-bit"
-	Trace-Log $databaseName
-	Trace-Log $hostAddress
-	Trace-Log $serverName
-
-	Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue
-}
+#function Create-ODBCDsn([string] $databaseName, [string] $hostAddress, [string] $serverName)
+#{
+#	$driverName = "SQL Anywhere 17"
+#	$dsnType    = "System"
+#	$platform   = "64-bit"
+#	Trace-Log $databaseName
+#	Trace-Log $hostAddress
+#	Trace-Log $serverName
+#
+#	$properties = @("DatabaseName=$databaseName", "ServerName=$serverName", "Integrated=NO", "Host=$hostAddress")
+#	Add-OdbcDsn -Name $databaseName -DriverName $driverName -Platform $platform -DsnType $dsnType -SetPropertyValue $properties -ErrorAction SilentlyContinue
+#}
 
 Trace-Log "Log file: $logLoc"
 $anyUri = "https://d5d4ifzqzkhwt.cloudfront.net/sqla17client/SQLA17_Windows_Client.exe"
@@ -264,10 +265,10 @@ Install-7zip $zipPath
 Install-SQLAnyWhere $anyPath
 
 
-$databaseArray    = $databaseList.Split(",")
-$hostAddressArray = $hostAddressList.Split(",")
-$serverNameArray  = $serverNameList.Split(",")
+#$databaseArray    = $databaseList.Split(",")
+#$hostAddressArray = $hostAddressList.Split(",")
+#$serverNameArray  = $serverNameList.Split(",")
 
-For ($i=0; $i -lt $databaseArray.Length; $i++) {
-	Create-ODBCDsn $databaseArray[$i] $hostAddressArray[$i] $serverNameArray[$i]
-}
+#For ($i=0; $i -lt $databaseArray.Length; $i++) {
+#	Create-ODBCDsn $databaseArray[$i] $hostAddressArray[$i] $serverNameArray[$i]
+#}
